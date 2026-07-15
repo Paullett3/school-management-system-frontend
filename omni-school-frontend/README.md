@@ -1,16 +1,11 @@
-# React + Vite
+This document outlines the user interface, routing logic, and visual styling of the React client. Key highlights included in the document:
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+UI/UX & Blue/White Theme Specs: Explains the design choices behind the Tailwind CSS color palette, utilizing royal blues, crisp white surfaces, and soft gradient backgrounds for a modern academic look.
 
-Currently, two official plugins are available:
+Interactive Role Persona Testing: Instructions on using the one-click role selector tabs on the login card (Student, Parent, Teacher, Admin/Registrar) to auto-populate credentials for instant testing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Component & Route Architecture: A clean directory tree and architectural overview of core components, including Login.jsx, the JWT-validating ProtectedRoute.jsx wrapper, and role-specific dashboard pages.
 
-## React Compiler
+State Management & API Client: Documents how the frontend handles HTTP requests with automated Bearer token injection and expiration handling via LocalStorage.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Installation & Vite Scripts: Step-by-step commands to clone, configure, launch, and build the React frontend for local development or production deployment.
