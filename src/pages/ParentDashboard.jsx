@@ -32,7 +32,7 @@ export default function ParentDashboard() {
     <div className="p-6 bg-slate-50 min-h-screen text-slate-800">
       {/* Header Banner */}
       <header className="mb-8 p-6 bg-linear-to-r from-teal-500 to-cyan-600 rounded-2xl shadow-lg text-white">
-        <h1 className="text-3xl font-bold">Guardian Overview</h1>
+        <h1 className="text-3xl font-bold">Parent/Guardian Overview</h1>
         <p className="text-teal-100 mt-1">
           Review student performance, crosscheck attendance percentages, and
           post verified feedback.

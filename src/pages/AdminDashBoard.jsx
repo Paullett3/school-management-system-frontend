@@ -32,7 +32,7 @@ export default function AdminDashboard() {
     <div className="p-6 bg-slate-50 min-h-screen text-slate-800">
       {/* Header Banner */}
       <header className="mb-8 p-6 bg-linear-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-lg text-white">
-        <h1 className="text-3xl font-bold">Admin Command Center</h1>
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <p className="text-purple-100 mt-1">
           Manage global enrollment, monitor system permissions, and lock
           operational access.
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
                 onChange={(e) =>
                   setNewUser({ ...newUser, name: e.target.value })
                 }
-                placeholder="e.g. Paullette Ndungu"
+                placeholder="e.g. Alex Cooper"
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm"
               />
             </div>
