@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
+  // 1. STATE MANAGEMENT: Remembers user inputs and the selected role
   const [selectedRole, setSelectedRole] = useState("student");
   const [email, setEmail] = useState("student@omnischool.edu");
   const [password, setPassword] = useState("1234");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // 2. ROLE DEFINITIONS: Configuration for our interactive tabs
   const roles = [
     { id: "student", label: "Student", badge: "bg-blue-100 text-blue-700" },
     { id: "parent", label: "Parent", badge: "bg-purple-100 text-purple-700" },
@@ -22,18 +24,21 @@ const Login = () => {
     { id: "admin", label: "Admin", badge: "bg-slate-800 text-white" },
   ];
 
+  // 3. EVENT HANDLER: What happens when you click a role tab
   const handleRoleChange = (roleId) => {
     setSelectedRole(roleId);
-    setEmail(`${roleId}@omnischool.edu`);
+    setEmail(`${roleId}@omnischool.edu`); // Auto-fills matching test email
     setErrorMessage("");
   };
 
+  // 4. FORM SUBMISSION: Sends login data to the backend API
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevents page reload
     setIsLoading(true);
     setErrorMessage("");
 
     try {
+      // Connect to your MERN backend API
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,9 +51,11 @@ const Login = () => {
         throw new Error(data.message || "Login failed. Try password 1234.");
       }
 
+      // Save user security token and profile in the browser's memory
       localStorage.setItem("omni_token", data.token);
       localStorage.setItem("omni_user", JSON.stringify(data));
 
+      // Redirect the user to their specific dashboard
       navigate(`/dashboard/${selectedRole}`);
     } catch (err) {
       setErrorMessage(err.message);
@@ -58,43 +65,44 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-babyBlue-light via-white to-silver-light flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-silver overflow-hidden">
-        {/* Header */}
-        <div className="bg-babyBlue-dark p-8 text-center relative">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white text-babyBlue-dark rounded-3xl font-black text-3xl mb-4 shadow-inner">
-            S
+    <div className="min-h-screen bg-linear-to-br from-babyBlue-light via-white to-silver-light">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-silver overflow-hidden transition-all duration-300 hover:shadow-babyBlue/20">
+        <div className="bg-babyBlue p-8 text-center relative overflow-hidden">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
+
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-white text-grey-charcoal rounded-2xl font-black text-2xl mb-3 shadow-md border border-silver-light">
+            OS
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            School Management System
+          <h1 className="text-2xl font-extrabold text-grey-charcoal tracking-tight">
+            School Management System Portal
           </h1>
-          <p className="text-babyBlue-light text-sm mt-1">
-            Secure Role-Based Portal
+          <p className="text-grey-charcoal/80 text-xs font-semibold uppercase tracking-wider mt-1">
+            Secure Role-Based Access
           </p>
         </div>
 
-        {/* Main Content */}
-        <div className="p-8">
-          {/* Role Selection */}
-          <div className="mb-8">
-            <label className="block text-xs font-bold text-grey-slate uppercase tracking-wider mb-3">
-              Select Your Role
+        {/* Dialog Body Section */}
+        <div className="p-6 sm:p-8 bg-white">
+          {/* STEP 1: Interactive Role Selection Tabs */}
+          <div className="mb-6">
+            <label className="block text-xs font-bold text-grey-slate uppercase tracking-wider mb-2">
+              1. Select Your Portal Persona:
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5">
               {roles.map((role) => (
                 <button
                   key={role.id}
                   type="button"
                   onClick={() => handleRoleChange(role.id)}
-                  className={`p-4 rounded-2xl text-sm font-semibold transition-all border flex items-center justify-between ${
+                  className={`p-2.5 rounded-xl text-xs font-bold transition-all duration-200 border text-left flex items-center justify-between ${
                     selectedRole === role.id
-                      ? "border-babyBlue-dark bg-babyBlue-light text-grey-charcoal shadow-sm"
-                      : "border-silver hover:bg-silver-light text-grey-slate"
+                      ? "border-babyBlue-dark bg-babyBlue-light text-grey-charcoal shadow-sm ring-2 ring-babyBlue/40"
+                      : "border-silver bg-silver-light/40 text-grey-slate hover:bg-silver-light hover:border-silver-dark"
                   }`}
                 >
                   <span className="capitalize">{role.label}</span>
                   <span
-                    className={`text-xs px-2.5 py-1 rounded-full font-bold ${role.badge}`}
+                    className={`text-[9px] px-1.5 py-0.5 rounded-md font-extrabold ${role.badge}`}
                   >
                     {role.id.toUpperCase()}
                   </span>
@@ -103,64 +111,72 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Error Message */}
+          {/* Error Message Alert */}
           {errorMessage && (
-            <div className="mb-5 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-xl">
+            <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-400 text-red-700 text-xs rounded-lg font-medium animate-pulse">
               ⚠️ {errorMessage}
             </div>
           )}
 
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* STEP 2: Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Address Input */}
             <div>
-              <label className="block text-xs font-bold text-grey-slate uppercase tracking-wider mb-2">
-                Email Address
+              <label className="block text-xs font-bold text-grey-charcoal uppercase tracking-wider mb-1">
+                2. Email Address
               </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-3.5 rounded-2xl border border-silver focus:border-babyBlue-dark focus:ring-1 focus:ring-babyBlue-dark outline-none transition-all text-grey-charcoal"
-                placeholder="your.email@omnischool.edu"
+                placeholder="enter.any.email@omnischool.edu"
+                className="w-full px-4 py-3 rounded-xl border border-silver focus:ring-2 focus:ring-babyBlue focus:border-babyBlue outline-none transition text-grey-charcoal text-sm bg-silver-light/30 focus:bg-white font-medium"
               />
+              <span className="text-[11px] text-grey-slate mt-1 inline-block">
+                💡 Any valid email works for initial workability testing.
+              </span>
             </div>
 
+            {/* Password Input */}
             <div>
-              <label className="block text-xs font-bold text-grey-slate uppercase tracking-wider mb-2">
-                Password
-              </label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-xs font-bold text-grey-charcoal uppercase tracking-wider">
+                  3. Password
+                </label>
+                <span className="text-[11px] font-bold text-babyBlue-dark">
+                  Default: 1234
+                </span>
+              </div>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-3.5 rounded-2xl border border-silver focus:border-babyBlue-dark focus:ring-1 focus:ring-babyBlue-dark outline-none transition-all text-grey-charcoal"
-                placeholder="Enter password"
+                className="w-full px-4 py-3 rounded-xl border border-silver focus:ring-2 focus:ring-babyBlue focus:border-babyBlue outline-none transition text-grey-charcoal text-sm bg-silver-light/30 focus:bg-white font-medium"
               />
-              <p className="text-[11px] text-babyBlue-dark mt-1.5">
-                Default demo password: <strong>1234</strong>
-              </p>
             </div>
 
+            {/* Submit Action Button: Styled in Baby Blue with Dark Grey Text */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-babyBlue-dark hover:bg-babyBlue-dark/90 text-white font-semibold py-4 rounded-2xl transition-all active:scale-[0.985] disabled:opacity-70 flex items-center justify-center gap-2"
+              className="w-full mt-2 bg-babyBlue hover:bg-babyBlue-dark active:scale-[0.99] text-grey-charcoal font-black py-3.5 px-4 rounded-xl shadow-lg shadow-babyBlue/30 hover:shadow-xl transition-all duration-200 flex justify-center items-center text-sm uppercase tracking-wider disabled:opacity-50 border border-white/40"
             >
-              {isLoading && (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent animate-spin rounded-full" />
-              )}
-              {isLoading
-                ? "Signing in..."
-                : `Enter ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Portal`}
+              {isLoading ? (
+                <span className="inline-block animate-spin rounded-full h-4 w-4 border-2 border-grey-charcoal border-t-transparent mr-2"></span>
+              ) : null}
+              {isLoading ? "Verifying..." : `Enter ${selectedRole} Portal`}
             </button>
           </form>
-        </div>
 
-        {/* Footer Note */}
-        <div className="px-8 py-6 bg-silver-light border-t border-silver text-center text-xs text-grey-slate">
-          This is a demo system. All academic records are protected.
+          {/* Dialog Footer */}
+          <div className="mt-8 pt-4 border-t border-silver/60 text-center">
+            <p className="text-[11px] text-grey-slate">
+              🛡️ <strong>System Notice:</strong> Locked academic records can
+              only be modified by authorized Admin or Registrar staff.
+            </p>
+          </div>
         </div>
       </div>
     </div>
